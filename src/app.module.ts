@@ -7,7 +7,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 @Module({
   imports: [
     MongooseModule.forRoot(
-      'mongodb+srv://suliko:suliko@cluster0.gb4cr.mongodb.net/cats?retryWrites=true&w=majority',
+      'mongodb+srv://admin:qzWMj7ENb63ToBAG@cluster0.x1dek.mongodb.net/test?retryWrites=true&w=majority',
+      { useNewUrlParser: true },
     ),
     CatsModule,
   ],
