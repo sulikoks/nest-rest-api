@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  main:
+    build:
+      context: .
+      target: development
+    container_name: main
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=db
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB
+    depends_on:
+      - mongo
+#      - postgres
+    ports:
+      - 9229:9229
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    networks:
+      - webnet
+    command: npm run start:dev
+  mongo:
+    image: mongo:4.1.8-xenial
+    container_name: mongo
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - webnet
+#  postgres:
+#    container_name: postgres
+#    image: postgres:12
+#    networks:
+#      - webnet
+#    environment:
+#      POSTGRES_PASSWORD: ${DB_PASSWORD}
+#      POSTGRES_USER: ${DB_USERNAME}
+#      POSTGRES_DB: ${DB_DATABASE_NAME}
+#      PG_DATA: /var/lib/postgresql/data
+#    volumes:
+#      - pgdata:/var/lib/postgresql/data
+#    ports:
+#      - 5432:5432
+networks:
+  webnet:
+    driver: bridge
+volumes:
+  dbdata:
+  node_modules:
